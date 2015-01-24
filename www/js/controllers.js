@@ -1,6 +1,11 @@
 angular.module('starter.controllers', ['starter.directives'])
 
-.controller('DashCtrl', function($scope, Stations) {
+.controller('DashCtrl', function($rootScope, $scope, Stations) {
+    $scope.doRefresh = function() {
+        $rootScope.$emit('stations.reload');
+        $scope.$broadcast('scroll.refreshComplete');
+    }
+
     $scope.stations = Stations;
 })
 

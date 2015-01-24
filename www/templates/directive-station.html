@@ -1,6 +1,6 @@
 <div station-id="station.id" station-name="station.name" class="list card station-card">
-  <div class="item item-divider">{{stationName}}</div>
-  <div class="item item-body">
+  <div on-tap="hidden = !hidden" class="item item-divider">{{stationName}}</div>
+  <div ng-show="hidden" class="item item-body">
     <div>
       <div class="row">
           <div class="col col-100">

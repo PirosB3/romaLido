@@ -5,7 +5,7 @@ var DIRECTIONS_TO_SCOPE = [
 
 angular.module('starter.directives', [])
 
-.directive('stationCard', function(Timetables) {
+.directive('stationCard', function($rootScope, Timetables) {
     return {
         restrict: 'E',
         scope: {
@@ -16,18 +16,24 @@ angular.module('starter.directives', [])
         replace: true,
         link: function(scope, el, attrs) {
 
-            var now = new XDate;
-
-            DIRECTIONS_TO_SCOPE.forEach(function(dir_and_scope) {
-                var direction = dir_and_scope[0]; var scopeName = dir_and_scope[1];
-                Timetables.getLastNTimes(scope.stationId, direction, now, 3)
-                    .then(function(tt) {
-                        var splits = tt.map(function(dt) {
-                            return "" + dt.getHours() + ":" + dt.getMinutes() +  " (in " + now.diffMinutes(dt) + " min)";
-                        });
-                        scope[scopeName] = splits.join(', ');
-                    });
+            $rootScope.$on('stations.reload', function() {
+                reload();
             });
+
+            var reload = function() {
+                var now = new XDate;
+                DIRECTIONS_TO_SCOPE.forEach(function(dir_and_scope) {
+                    var direction = dir_and_scope[0]; var scopeName = dir_and_scope[1];
+                    Timetables.getLastNTimes(scope.stationId, direction, now, 2)
+                        .then(function(tt) {
+                            var splits = tt.map(function(dt) {
+                                return "" + dt.getHours() + ":" + dt.getMinutes() +  " (in " + now.diffMinutes(dt) + " min)";
+                            });
+                            scope[scopeName] = splits.join(', ');
+                        });
+                });
+            }
+            reload();
         }
     };
 });
