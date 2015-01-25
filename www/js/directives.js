@@ -5,7 +5,7 @@ var DIRECTIONS_TO_SCOPE = [
 
 angular.module('starter.directives', [])
 
-.directive('stationCard', function($rootScope, Timetables) {
+.directive('stationCard', function($rootScope, Storage, Timetables) {
     return {
         restrict: 'E',
         scope: {
@@ -18,6 +18,9 @@ angular.module('starter.directives', [])
 
             $rootScope.$on('stations.reload', function() {
                 reload();
+            });
+            $rootScope.$on('storage.changed', function() {
+                reloadIsFavourite();
             });
 
             var reload = function() {
@@ -33,7 +36,24 @@ angular.module('starter.directives', [])
                         });
                 });
             }
+
+            var reloadIsFavourite = function() {
+                var favs = Storage.getObject('favourites');
+                scope.isFavourite = favs[scope.stationId] === true;
+            }
+
+            scope.toggleFavourites = function() {
+                var favs = Storage.getObject('favourites');
+                if (angular.isUndefined(favs[scope.stationId])) {
+                    favs[scope.stationId] = true;
+                } else {
+                    favs[scope.stationId] = !favs[scope.stationId];
+                }
+                Storage.setObject('favourites', favs);
+            }
+
             reload();
+            reloadIsFavourite();
         }
     };
 });

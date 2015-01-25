@@ -1,5 +1,8 @@
 <div station-id="station.id" station-name="station.name" class="list card station-card">
-  <div on-tap="hidden = !hidden" class="item item-divider">{{stationName}}</div>
+    <div on-tap="hidden = !hidden" class="item item-divider">
+        <span style="display: inline-block;">{{stationName}}</span>
+        <i style="float: right; font-size: 25px;" ng-style="{ color: isFavourite ? 'green' : 'black'}" class="icon ion-bookmark" on-tap="toggleFavourites(); $event.stopPropagation()"></i>
+    </div>
   <div ng-show="hidden" class="item item-body">
     <div>
       <div class="row">

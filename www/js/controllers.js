@@ -6,30 +6,37 @@ angular.module('starter.controllers', ['starter.directives'])
         $scope.$broadcast('scroll.refreshComplete');
     }
 
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+        $scope.currentPosition = position.coords;
+    }, null, options);
+
     $scope.stations = Stations;
 })
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  }
-})
+.controller('FavouritesCtrl', function($rootScope, $scope, Stations, Storage) {
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
+    var reload = function() {
+        var favs = Storage.getObject('favourites');
+        $scope.stations = Stations.filter(function(s) {
+            return favs[s.id] === true;
+        });
+    }
 
-.controller('FriendsCtrl', function($scope, Friends) {
-  $scope.friends = Friends.all();
-})
+    $scope.doRefresh = function() {
+        $rootScope.$emit('stations.reload');
+        $scope.$broadcast('scroll.refreshComplete');
+    }
 
-.controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
-  $scope.friend = Friends.get($stateParams.friendId);
-})
+    $rootScope.$on('storage.changed', function() {
+        reload();
+    });
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-});
+    reload();
+
+})

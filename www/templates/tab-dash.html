@@ -1,6 +1,6 @@
 <ion-view view-title="Orari Roma-Lido">
   <ion-content class="padding">
      <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()"></ion-refresher>
-     <station-card station-id="station.id" station-name="station.name" ng-repeat="station in stations">
+     <station-card station-id="station.id" station-name="station.name" ng-repeat="station in stations|distance:currentPosition">
   </ion-content>
 </ion-view>
