@@ -3,7 +3,7 @@ angular.module('starter.services', [])
 .factory('Timetables', function($http, $q) {
 
     var tables = $q.defer();
-    $http.get('/js/data/timetables-mon-fri.js')
+    $http.get('js/data/timetables-mon-fri.js')
         .then(function(res) {
             var data = res.data;
             var timetables = {}

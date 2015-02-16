@@ -12,7 +12,7 @@ angular.module('starter.directives', [])
             stationName: "=",
             stationId: "="
         },
-        templateUrl: '/templates/directive-station.html',
+        templateUrl: 'templates/directive-station.html',
         replace: true,
         link: function(scope, el, attrs) {
 
